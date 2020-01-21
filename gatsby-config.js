@@ -1,10 +1,9 @@
 module.exports = {
   siteMetadata: {
-    // edit below
     title: `Matthew T Farley`,
     author: `Matthew T Farley`,
     description: `The personal website of Matthew T Farley.`,
-    siteUrl: `https://matthewtfarley.netlify.com/`,
+    siteUrl: `https://matthewtfarley.com/`,
     social: {
       twitter: `matthewtfarley`,
     },
@@ -70,14 +69,13 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `Gatsby Starter Blog`,
-        short_name: `GatsbyJS`,
+        name: `Matthew T Farley Website`,
+        short_name: `MTF`,
         start_url: `/`,
         background_color: `#ffffff`,
         theme_color: `#663399`,
         display: `minimal-ui`,
-        // edit below
-        icon: `content/assets/gatsby-icon.png`,
+        icon: `content/assets/profile-pic.png`,
       },
     },
     {
