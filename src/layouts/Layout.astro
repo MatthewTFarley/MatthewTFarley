@@ -38,6 +38,15 @@ const headerLink = currentPath === "/blog/" || currentPath === "/blog" ? "/blog/
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={metaDescription} />
     {keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
+    <script is:inline>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+          for (var i = 0; i < registrations.length; i++) {
+            registrations[i].unregister();
+          }
+        });
+      }
+    </script>
   </head>
   <body>
     <div class="min-h-screen">
