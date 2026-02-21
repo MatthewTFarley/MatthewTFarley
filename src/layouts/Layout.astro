@@ -1,21 +1,20 @@
 ---
 import "../styles/global.css";
+import ThemeToggle from "../components/ThemeToggle.astro";
 
 interface Props {
   title: string;
   description?: string;
   keywords?: string[];
-  isRoot?: boolean;
 }
 
-const { title, description, keywords = [], isRoot = false } = Astro.props;
+const { title, description, keywords = [] } = Astro.props;
 const siteTitle = "Matthew T Farley";
 const siteDescription = "The personal website of Matthew T Farley.";
 const metaDescription = description || siteDescription;
 
 const currentPath = Astro.url.pathname;
-const isRootOrBlog = currentPath === "/" || currentPath === "/blog/" || currentPath === "/blog";
-const headerLink = currentPath === "/blog/" || currentPath === "/blog" ? "/blog/" : "/";
+const isHome = currentPath === "/";
 ---
 
 <!doctype html>
@@ -24,8 +23,10 @@ const headerLink = currentPath === "/blog/" || currentPath === "/blog" ? "/blog/
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@400;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <title>{title} | {siteTitle}</title>
@@ -39,40 +40,47 @@ const headerLink = currentPath === "/blog/" || currentPath === "/blog" ? "/blog/
     <meta name="twitter:description" content={metaDescription} />
     {keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
     <script is:inline>
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function (registrations) {
-          for (var i = 0; i < registrations.length; i++) {
-            registrations[i].unregister();
-          }
-        });
-      }
+      (function () {
+        const stored = localStorage.getItem("theme");
+        if (stored === "dark" || (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
     </script>
   </head>
   <body>
-    <div class="min-h-screen">
-      <div class="mx-auto max-w-2xl px-5 py-10">
-        <header>
-          {isRootOrBlog ? (
-            <h1 class="mt-0 mb-10">
-              <a href={headerLink} class="no-underline shadow-none text-inherit !box-shadow-none !text-current">
-                {siteTitle}
-              </a>
-            </h1>
-          ) : (
-            <h3 class="font-sans mt-0">
-              <a href="/blog/" class="no-underline shadow-none text-inherit !box-shadow-none !text-current">
-                {siteTitle}
-              </a>
-            </h3>
-          )}
+    <div class="min-h-screen flex flex-col">
+      <div class="mx-auto w-full max-w-3xl px-6 py-8 flex-1">
+        <header class="flex items-center justify-between mb-12">
+          <a
+            href="/"
+            class="text-lg font-semibold tracking-tight no-underline"
+            style="color: var(--color-text);"
+          >
+            {siteTitle}
+          </a>
+          <nav class="flex items-center gap-6">
+            <a
+              href="/blog/"
+              class:list={[
+                "text-sm font-medium no-underline transition-colors",
+                currentPath.startsWith("/blog") ? "" : "",
+              ]}
+              style="color: var(--color-text-secondary);"
+              onmouseover="this.style.color='var(--color-text)'"
+              onmouseout="this.style.color='var(--color-text-secondary)'"
+            >
+              Blog
+            </a>
+            <ThemeToggle />
+          </nav>
         </header>
         <main>
           <slot />
         </main>
       </div>
-      <footer class="text-center mx-6 mb-6">
-        © {new Date().getFullYear()}, Built with
-        <a href="https://astro.build">Astro</a>
+      <footer class="text-center py-8" style="color: var(--color-text-tertiary); font-size: 0.8rem;">
+        &copy; {new Date().getFullYear()} {siteTitle}
       </footer>
     </div>
   </body>

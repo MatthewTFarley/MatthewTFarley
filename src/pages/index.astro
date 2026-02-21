@@ -1,19 +1,81 @@
 ---
+import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
-import Button from "../components/Button.astro";
+import Bio from "../components/Bio.astro";
+
+const posts = (await getCollection("blog"))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3);
 ---
 
 <Layout
   title="Home"
   keywords={["personal", "portfolio", "blog", "astro", "javascript", "react"]}
 >
-  <h2>
-    Hey!&nbsp;<span role="img" aria-label="wave emoji">👋</span>
-  </h2>
-  <p>Welcome to my personal website!</p>
-  <p>This site is under construction. Check back for updates!</p>
-  <p>- Matt</p>
-  <a href="/blog/" class="!shadow-none">
-    <Button class="mt-9">Blog</Button>
-  </a>
+  <section class="mb-16">
+    <Bio />
+    <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-3" style="letter-spacing: -0.03em;">
+      Matthew T Farley
+    </h1>
+    <p class="text-lg mb-6" style="color: var(--color-text-secondary);">
+      Software engineer in Philadelphia
+    </p>
+    <p style="color: var(--color-text-secondary);">
+      Welcome to my corner of the internet. I write about software engineering,
+      tools I find interesting, and things I'm learning along the way.
+    </p>
+  </section>
+
+  {posts.length > 0 && (
+    <section>
+      <h2 class="text-sm font-medium uppercase tracking-wider mb-6" style="color: var(--color-text-tertiary); letter-spacing: 0.1em;">
+        Recent Posts
+      </h2>
+      <div class="flex flex-col gap-1">
+        {posts.map((post) => {
+          const date = new Date(post.data.date).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+          return (
+            <a
+              href={`/blog/${post.id}/`}
+              class="group block no-underline rounded-lg -mx-4 px-4 py-4 transition-colors"
+              style="color: inherit;"
+            >
+              <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-4">
+                <h3 class="text-base font-medium group-hover:text-[var(--color-accent)] transition-colors m-0">
+                  {post.data.title}
+                </h3>
+                <time
+                  class="font-mono text-xs shrink-0"
+                  style="color: var(--color-text-tertiary);"
+                >
+                  {date}
+                </time>
+              </div>
+              <p class="text-sm mt-1 mb-0" style="color: var(--color-text-secondary);">
+                {post.data.description}
+              </p>
+            </a>
+          );
+        })}
+      </div>
+      <div class="mt-8">
+        <a
+          href="/blog/"
+          class="text-sm font-medium inline-flex items-center gap-1"
+        >
+          View all posts <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </section>
+  )}
 </Layout>
+
+<style>
+  a.group:hover {
+    background-color: var(--color-code-bg);
+  }
+</style>

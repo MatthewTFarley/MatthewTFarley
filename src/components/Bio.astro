@@ -3,13 +3,16 @@ import { Image } from "astro:assets";
 import profilePic from "../assets/profile-pic.jpg";
 ---
 
-<div class="flex items-center mb-7">
+<div class="flex items-center gap-4 mb-8">
   <Image
     src={profilePic}
     alt="Matthew T Farley"
-    width={50}
-    height={50}
-    class="rounded-full mr-3 mb-0 min-w-[50px]"
+    width={64}
+    height={64}
+    class="rounded-full min-w-[64px] ring-2 ring-offset-2"
+    style="ring-color: var(--color-border); ring-offset-color: var(--color-bg);"
   />
-  <p class="mb-0">I'm a software engineer living in Philadelphia.</p>
+  <p class="mb-0 text-[0.95rem]" style="color: var(--color-text-secondary);">
+    Software engineer based in Philadelphia.
+  </p>
 </div>
