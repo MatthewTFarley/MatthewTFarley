@@ -9,7 +9,7 @@ Personal website for Matthew T Farley, hosted at [matthewtfarley.com](https://ma
 - **Framework**: Astro v5 (static site generator)
 - **Styling**: Tailwind CSS v4 (via `@tailwindcss/vite` plugin)
 - **Content**: MDX for blog posts (using Astro's content collections with glob loader)
-- **Fonts**: Montserrat (headings) and Merriweather (body) via Google Fonts
+- **Fonts**: Geist (body/headings) and Geist Mono (code) via Google Fonts
 - **Hosting**: Netlify (Node 22)
 - **Language**: TypeScript (strict mode via `astro/tsconfigs/strict`)
 
@@ -17,7 +17,7 @@ Personal website for Matthew T Farley, hosted at [matthewtfarley.com](https://ma
 
 ```
 src/
-  components/    # Reusable Astro components (Bio, Button)
+  components/    # Reusable Astro components (Bio, ThemeToggle)
   content/
     blog/        # Blog posts as .mdx files
   content.config.ts  # Content collection schema (title, date, description)
@@ -52,5 +52,5 @@ description: string
 
 - Astro components use `.astro` single-file component format
 - Tailwind utility classes for layout; global CSS for typography and base styles
-- Link color: `#007acc`
-- Heading font: `--font-sans` (Montserrat); body font: `--font-serif` (Merriweather)
+- Accent/link color: `--color-accent` (`#059669` light / `#34d399` dark)
+- Font: `--font-sans` (Geist); code font: `--font-mono` (Geist Mono)

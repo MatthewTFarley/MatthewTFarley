@@ -135,8 +135,8 @@ pre {
   padding: 1.25rem;
   overflow: auto;
   border-radius: 8px;
-  background: #1e1e1e;
-  color: #d4d4d4;
+  background: var(--color-code-bg);
+  color: var(--color-text);
 }
 
 pre code {

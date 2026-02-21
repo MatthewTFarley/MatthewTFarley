@@ -68,13 +68,7 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
           <nav class="flex items-center gap-6">
             <a
               href="/blog/"
-              class:list={[
-                "text-sm font-medium no-underline transition-colors",
-                currentPath.startsWith("/blog") ? "" : "",
-              ]}
-              style="color: var(--color-text-secondary);"
-              onmouseover="this.style.color='var(--color-text)'"
-              onmouseout="this.style.color='var(--color-text-secondary)'"
+              class="nav-link text-sm font-medium no-underline transition-colors"
             >
               Blog
             </a>
@@ -91,3 +85,12 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
     </div>
   </body>
 </html>
+
+<style>
+  .nav-link {
+    color: var(--color-text-secondary);
+  }
+  .nav-link:hover {
+    color: var(--color-text);
+  }
+</style>
