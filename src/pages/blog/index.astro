@@ -1,0 +1,36 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Bio from "../../components/Bio.astro";
+import Button from "../../components/Button.astro";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<Layout title="All posts">
+  <Bio />
+  <div class="my-5 mb-10">
+    {posts.map((post) => {
+      const title = post.data.title || post.id;
+      const date = new Date(post.data.date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "2-digit",
+      });
+      return (
+        <div>
+          <h3 class="mb-1">
+            <a href={`/blog/${post.id}/`}>{title}</a>
+          </h3>
+          <small>{date}</small>
+          <p>{post.data.description}</p>
+        </div>
+      );
+    })}
+  </div>
+  <a href="/" class="!shadow-none">
+    <Button class="mt-20">Go Home</Button>
+  </a>
+</Layout>

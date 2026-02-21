@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Montserrat", sans-serif;
+  --font-serif: "Merriweather", serif;
+}
+
+html {
+  font-family: var(--font-serif);
+  color: hsla(0, 0%, 0%, 0.9);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+body {
+  font-weight: 400;
+  word-wrap: break-word;
+  font-kerning: normal;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-sans);
+  font-weight: 900;
+  text-rendering: optimizeLegibility;
+  line-height: 1.1;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2.625rem;
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 1.7rem;
+  margin-bottom: 1.75rem;
+  margin-top: 3.5rem;
+}
+
+h3 {
+  font-size: 1.31rem;
+  margin-bottom: 1.75rem;
+  margin-top: 3.5rem;
+}
+
+p {
+  margin-bottom: 1.75rem;
+}
+
+a {
+  color: #007acc;
+  box-shadow: 0 1px 0 0 currentColor;
+}
+
+a:hover {
+  text-decoration: none;
+  box-shadow: none;
+}
+
+hr {
+  background: hsla(0, 0%, 0%, 0.2);
+  border: none;
+  height: 1px;
+  margin-bottom: 1.75rem;
+}
+
+blockquote {
+  margin-left: -1.75rem;
+  margin-right: 1.75rem;
+  margin-top: 0;
+  padding-bottom: 0;
+  padding-left: 1.42188rem;
+  padding-right: 0;
+  padding-top: 0;
+  margin-bottom: 1.75rem;
+  font-size: 1.20112rem;
+  line-height: 1.75rem;
+  color: hsla(0, 0%, 0%, 0.59);
+  font-style: italic;
+  border-left: 0.32813rem solid hsla(0, 0%, 0%, 0.9);
+}
+
+ul,
+ol {
+  margin-left: 1.75rem;
+  margin-bottom: 1.75rem;
+}
+
+li > p {
+  margin-bottom: calc(1.75rem / 2);
+}
+
+code {
+  font-size: 0.85rem;
+}
+
+pre {
+  margin-bottom: 1.75rem;
+  padding: 1rem;
+  overflow: auto;
+  border-radius: 4px;
+  background: #1e1e1e;
+  color: #d4d4d4;
+}
+
+pre code {
+  font-size: 0.85rem;
+}

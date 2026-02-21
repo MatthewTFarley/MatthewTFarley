@@ -1,0 +1,60 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Bio from "../../components/Bio.astro";
+import Button from "../../components/Button.astro";
+
+export async function getStaticPaths() {
+  const posts = (await getCollection("blog")).sort(
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+  );
+
+  return posts.map((post, index) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      next: index > 0 ? posts[index - 1] : null,
+      previous: index < posts.length - 1 ? posts[index + 1] : null,
+    },
+  }));
+}
+
+const { post, previous, next } = Astro.props;
+const { Content } = await render(post);
+const date = new Date(post.data.date).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "2-digit",
+});
+---
+
+<Layout title={post.data.title} description={post.data.description}>
+  <h1>{post.data.title}</h1>
+  <p class="text-sm block mb-7 -mt-7">{date}</p>
+  <div class="prose">
+    <Content />
+  </div>
+  <hr class="mb-7" />
+  <Bio />
+
+  <ul class="flex flex-wrap justify-between list-none p-0 m-0">
+    <li>
+      {previous && (
+        <a href={`/blog/${previous.id}/`} rel="prev">
+          ← {previous.data.title}
+        </a>
+      )}
+    </li>
+    <li>
+      {next && (
+        <a href={`/blog/${next.id}/`} rel="next">
+          {next.data.title} →
+        </a>
+      )}
+    </li>
+  </ul>
+
+  <a href="/blog/" class="!shadow-none">
+    <Button class="mt-9">Blog</Button>
+  </a>
+</Layout>
