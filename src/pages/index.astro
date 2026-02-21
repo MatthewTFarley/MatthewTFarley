@@ -1,0 +1,19 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Button from "../components/Button.astro";
+---
+
+<Layout
+  title="Home"
+  keywords={["personal", "portfolio", "blog", "astro", "javascript", "react"]}
+>
+  <h2>
+    Hey!&nbsp;<span role="img" aria-label="wave emoji">👋</span>
+  </h2>
+  <p>Welcome to my personal website!</p>
+  <p>This site is under construction. Check back for updates!</p>
+  <p>- Matt</p>
+  <a href="/blog/" class="!shadow-none">
+    <Button class="mt-9">Blog</Button>
+  </a>
+</Layout>

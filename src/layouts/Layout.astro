@@ -1,0 +1,70 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  keywords?: string[];
+  isRoot?: boolean;
+}
+
+const { title, description, keywords = [], isRoot = false } = Astro.props;
+const siteTitle = "Matthew T Farley";
+const siteDescription = "The personal website of Matthew T Farley.";
+const metaDescription = description || siteDescription;
+
+const currentPath = Astro.url.pathname;
+const isRootOrBlog = currentPath === "/" || currentPath === "/blog/" || currentPath === "/blog";
+const headerLink = currentPath === "/blog/" || currentPath === "/blog" ? "/blog/" : "/";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title} | {siteTitle}</title>
+    <meta name="description" content={metaDescription} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@matthewtfarley" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={metaDescription} />
+    {keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
+  </head>
+  <body>
+    <div class="min-h-screen">
+      <div class="mx-auto max-w-2xl px-5 py-10">
+        <header>
+          {isRootOrBlog ? (
+            <h1 class="mt-0 mb-10">
+              <a href={headerLink} class="no-underline shadow-none text-inherit !box-shadow-none !text-current">
+                {siteTitle}
+              </a>
+            </h1>
+          ) : (
+            <h3 class="font-sans mt-0">
+              <a href="/blog/" class="no-underline shadow-none text-inherit !box-shadow-none !text-current">
+                {siteTitle}
+              </a>
+            </h3>
+          )}
+        </header>
+        <main>
+          <slot />
+        </main>
+      </div>
+      <footer class="text-center mx-6 mb-6">
+        © {new Date().getFullYear()}, Built with
+        <a href="https://astro.build">Astro</a>
+      </footer>
+    </div>
+  </body>
+</html>

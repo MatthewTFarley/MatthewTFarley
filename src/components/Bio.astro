@@ -1,0 +1,15 @@
+---
+import { Image } from "astro:assets";
+import profilePic from "../assets/profile-pic.jpg";
+---
+
+<div class="flex items-center mb-7">
+  <Image
+    src={profilePic}
+    alt="Matthew T Farley"
+    width={50}
+    height={50}
+    class="rounded-full mr-3 mb-0 min-w-[50px]"
+  />
+  <p class="mb-0">I'm a software engineer living in Philadelphia.</p>
+</div>
