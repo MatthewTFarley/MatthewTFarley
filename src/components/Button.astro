@@ -8,11 +8,18 @@ const { class: className = "" } = Astro.props;
 
 <button
   class:list={[
-    "block border-none text-center box-border no-underline px-6 py-2.5 cursor-pointer uppercase tracking-widest",
-    "bg-black text-white text-[15px] font-semibold rounded-md",
-    "hover:shadow-[inset_0_0_100px_100px_rgba(255,255,255,0.25)]",
+    "inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-lg cursor-pointer",
+    "border transition-colors duration-150",
     className,
   ]}
+  style="color: var(--color-accent); border-color: var(--color-border); background: transparent;"
 >
   <slot />
 </button>
+
+<style>
+  button:hover {
+    background-color: var(--color-code-bg);
+    border-color: var(--color-accent);
+  }
+</style>

@@ -1,8 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
-import Bio from "../../components/Bio.astro";
-import Button from "../../components/Button.astro";
 
 const posts = (await getCollection("blog")).sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
@@ -10,27 +8,46 @@ const posts = (await getCollection("blog")).sort(
 ---
 
 <Layout title="All posts">
-  <Bio />
-  <div class="my-5 mb-10">
-    {posts.map((post) => {
+  <h1 class="mb-8">All Posts</h1>
+  <div class="flex flex-col">
+    {posts.map((post, index) => {
       const title = post.data.title || post.id;
       const date = new Date(post.data.date).toLocaleDateString("en-US", {
         year: "numeric",
-        month: "long",
-        day: "2-digit",
+        month: "short",
+        day: "numeric",
       });
       return (
-        <div>
-          <h3 class="mb-1">
-            <a href={`/blog/${post.id}/`}>{title}</a>
-          </h3>
-          <small>{date}</small>
-          <p>{post.data.description}</p>
-        </div>
+        <>
+          {index > 0 && <hr class="my-0" />}
+          <a
+            href={`/blog/${post.id}/`}
+            class="group block no-underline rounded-lg -mx-4 px-4 py-5 transition-colors"
+            style="color: inherit;"
+          >
+            <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-4">
+              <h3 class="text-base font-medium group-hover:text-[var(--color-accent)] transition-colors m-0">
+                {title}
+              </h3>
+              <time
+                class="font-mono text-xs shrink-0"
+                style="color: var(--color-text-tertiary);"
+              >
+                {date}
+              </time>
+            </div>
+            <p class="text-sm mt-1.5 mb-0" style="color: var(--color-text-secondary);">
+              {post.data.description}
+            </p>
+          </a>
+        </>
       );
     })}
   </div>
-  <a href="/" class="!shadow-none">
-    <Button class="mt-20">Go Home</Button>
-  </a>
 </Layout>
+
+<style>
+  a.group:hover {
+    background-color: var(--color-code-bg);
+  }
+</style>

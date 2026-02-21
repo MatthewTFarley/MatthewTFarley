@@ -3,6 +3,13 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="404: Not Found">
-  <h1>Not Found</h1>
-  <p>You just hit a route that doesn't exist... the sadness.</p>
+  <div class="py-16 text-center">
+    <h1 class="mb-4">404</h1>
+    <p style="color: var(--color-text-secondary);">
+      This page doesn't exist. It might have been moved, or maybe it was never here.
+    </p>
+    <a href="/" class="text-sm font-medium inline-flex items-center gap-1 mt-4">
+      <span aria-hidden="true">&larr;</span> Back home
+    </a>
+  </div>
 </Layout>
