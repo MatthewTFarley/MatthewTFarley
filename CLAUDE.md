@@ -10,7 +10,7 @@ Personal website for Matthew T Farley, hosted at [matthewtfarley.com](https://ma
 - **Styling**: Tailwind CSS v4 (via `@tailwindcss/vite` plugin)
 - **Content**: MDX for blog posts (using Astro's content collections with glob loader)
 - **Fonts**: Geist (body/headings) and Geist Mono (code) via Google Fonts
-- **Hosting**: Netlify (Node 22)
+- **Hosting**: Netlify (Node 24)
 - **Language**: TypeScript (strict mode via `astro/tsconfigs/strict`)
 
 ## Project Structure
