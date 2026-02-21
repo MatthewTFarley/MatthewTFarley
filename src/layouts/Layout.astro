@@ -15,6 +15,8 @@ const metaDescription = description || siteDescription;
 
 const currentPath = Astro.url.pathname;
 const isHome = currentPath === "/";
+const ogTitle = isHome ? siteTitle : `${title} | ${siteTitle}`;
+const ogImage = new URL("/og-image.png", Astro.site).href;
 ---
 
 <!doctype html>
@@ -31,13 +33,17 @@ const isHome = currentPath === "/";
     />
     <title>{title} | {siteTitle}</title>
     <meta name="description" content={metaDescription} />
-    <meta property="og:title" content={title} />
+    <meta property="og:title" content={ogTitle} />
     <meta property="og:description" content={metaDescription} />
     <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:site_name" content={siteTitle} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:creator" content="@matthewtfarley" />
-    <meta name="twitter:title" content={title} />
+    <meta name="twitter:title" content={ogTitle} />
     <meta name="twitter:description" content={metaDescription} />
+    <meta name="twitter:image" content={ogImage} />
     {keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
     <script is:inline>
       (function () {
