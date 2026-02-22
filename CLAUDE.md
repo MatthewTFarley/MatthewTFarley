@@ -12,6 +12,8 @@ Personal website for Matthew T Farley, hosted at [matthewtfarley.com](https://ma
 - **Fonts**: Geist (body/headings) and Geist Mono (code) via Google Fonts
 - **Hosting**: Netlify (Node 24)
 - **Language**: TypeScript (strict mode via `astro/tsconfigs/strict`)
+- **Package Manager**: pnpm
+- **Install Script Policy**: `pnpm-workspace.yaml` (`onlyBuiltDependencies`)
 
 ## Project Structure
 
@@ -34,9 +36,10 @@ public/          # Static assets (favicon, images)
 
 ## Commands
 
-- `npm run dev` — Start dev server
-- `npm run build` — Production build (outputs to `dist/`)
-- `npm run preview` — Preview production build locally
+- `pnpm run dev` — Start dev server
+- `pnpm run build` — Production build (outputs to `dist/`)
+- `pnpm run preview` — Preview production build locally
+- `pnpm install` — Install dependencies (respects `pnpm-workspace.yaml` build approvals)
 
 ## Blog Posts
 
