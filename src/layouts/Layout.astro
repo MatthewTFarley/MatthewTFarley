@@ -44,20 +44,27 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
     <meta name="twitter:title" content={ogTitle} />
     <meta name="twitter:description" content={metaDescription} />
     <meta name="twitter:image" content={ogImage} />
-    {keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
+    {
+      keywords.length > 0 && (
+        <meta name="keywords" content={keywords.join(", ")} />
+      )
+    }
     <script is:inline>
       (function () {
         const stored = localStorage.getItem("theme");
-        if (stored === "dark" || (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        if (
+          stored === "dark" ||
+          (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
           document.documentElement.classList.add("dark");
         }
       })();
     </script>
   </head>
   <body>
-    <div class="min-h-screen flex flex-col">
-      <div class="mx-auto w-full max-w-3xl px-6 py-8 flex-1">
-        <header class="flex items-center justify-between mb-12">
+    <div class="flex min-h-screen flex-col">
+      <div class="mx-auto w-full max-w-3xl flex-1 px-6 py-8">
+        <header class="mb-12 flex items-center justify-between">
           <a
             href="/"
             class="text-lg font-semibold tracking-tight no-underline"
@@ -79,8 +86,12 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
           <slot />
         </main>
       </div>
-      <footer class="text-center py-8" style="color: var(--color-text-tertiary); font-size: 0.8rem;">
-        &copy; {new Date().getFullYear()} {siteTitle}
+      <footer
+        class="py-8 text-center"
+        style="color: var(--color-text-tertiary); font-size: 0.8rem;"
+      >
+        &copy; {new Date().getFullYear()}
+        {siteTitle}
       </footer>
     </div>
   </body>
