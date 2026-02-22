@@ -11,11 +11,12 @@ Follow these instructions unless a direct user request overrides them.
 - Content: MDX blog posts through Astro content collections.
 - Hosting target: Netlify.
 - Node runtime target: Node 24 (`netlify.toml` and `.nvmrc`).
+- Package manager: pnpm (`packageManager` in `package.json`).
 
 ## Source of Truth
 - Repository conventions in code under `src/`.
 - Project notes in `CLAUDE.md`.
-- Tooling config in `package.json`, `.prettierrc`, `tsconfig.json`, `astro.config.mjs`.
+- Tooling config in `package.json`, `pnpm-workspace.yaml`, `.prettierrc`, `tsconfig.json`, `astro.config.mjs`.
 - If conventions conflict, prefer:
   1) Explicit user instruction
   2) Existing file-local pattern
@@ -38,42 +39,42 @@ Follow these instructions unless a direct user request overrides them.
 - `public/`: static assets.
 
 ## Setup Commands
-- Install deps: `npm install`
+- Install deps: `pnpm install`
 - Verify Node: `node -v` (expect Node 24 in deployment environment).
-- Start dev server: `npm run dev`
-- Build production site: `npm run build`
-- Preview built output: `npm run preview`
+- Start dev server: `pnpm run dev`
+- Build production site: `pnpm run build`
+- Preview built output: `pnpm run preview`
 
 ## Build/Lint/Test Commands
-- Build: `npm run build`
-- Dev: `npm run dev`
-- Preview: `npm run preview`
-- Astro CLI passthrough: `npm run astro -- <subcommand>`
-- Type/content checks (recommended): `npm run astro -- check`
+- Build: `pnpm run build`
+- Dev: `pnpm run dev`
+- Preview: `pnpm run preview`
+- Astro CLI passthrough: `pnpm run astro -- <subcommand>`
+- Type/content checks (recommended): `pnpm run astro -- check`
 - Lint: no lint script configured in `package.json`.
 - Tests: no test script or test runner configured.
 
 ## Formatting Commands
 - Config source: `.prettierrc`
-- Check formatting: `npx prettier . --check`
-- Apply formatting: `npx prettier . --write`
+- Check formatting: `pnpm exec prettier . --check`
+- Apply formatting: `pnpm exec prettier . --write`
 
 ## Running a Single Test (Important)
 - Single-test execution is not available yet because no test framework is configured.
 - There are no `*test*` files in the repository at time of writing.
 - Current verification flow:
-  1) `npm run astro -- check`
-  2) `npm run build`
-  3) `npm run preview` and manually verify changed pages
+  1) `pnpm run astro -- check`
+  2) `pnpm run build`
+  3) `pnpm run preview` and manually verify changed pages
 - If a test runner is added later, add scripts for:
   - full suite (`test`)
   - watch mode (`test:watch`)
   - targeted runs (`test:single`)
 - Future examples (only after framework install):
-  - Vitest file: `npx vitest run path/to/file.test.ts`
-  - Vitest name: `npx vitest run -t "test name"`
-  - Jest file: `npx jest path/to/file.test.ts`
-  - Jest name: `npx jest -t "test name"`
+  - Vitest file: `pnpm exec vitest run path/to/file.test.ts`
+  - Vitest name: `pnpm exec vitest run -t "test name"`
+  - Jest file: `pnpm exec jest path/to/file.test.ts`
+  - Jest name: `pnpm exec jest -t "test name"`
 
 ## Code Style Guidelines
 
@@ -143,9 +144,9 @@ Follow these instructions unless a direct user request overrides them.
 
 ## Agent Workflow
 - Before finishing:
-  1) Run `npm run astro -- check` when relevant.
-  2) Run `npm run build` for build-affecting changes.
-  3) Use `npm run preview` for UI sanity checks when pages/styles changed.
+  1) Run `pnpm run astro -- check` when relevant.
+  2) Run `pnpm run build` for build-affecting changes.
+  3) Use `pnpm run preview` for UI sanity checks when pages/styles changed.
 - If commands are not run, state why.
 - Do not introduce broad formatting churn.
 
