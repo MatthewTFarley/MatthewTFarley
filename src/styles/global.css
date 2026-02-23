@@ -47,7 +47,9 @@ body {
   font-weight: 400;
   word-wrap: break-word;
   font-kerning: normal;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 h1,

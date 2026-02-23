@@ -39,6 +39,8 @@ public/          # Static assets (favicon, images)
 - `pnpm run dev` — Start dev server
 - `pnpm run build` — Production build (outputs to `dist/`)
 - `pnpm run preview` — Preview production build locally
+- `pnpm run format:check` — Check Prettier formatting
+- `pnpm run format:fix` — Apply Prettier formatting
 - `pnpm install` — Install dependencies (respects `pnpm-workspace.yaml` build approvals)
 
 ## Blog Posts

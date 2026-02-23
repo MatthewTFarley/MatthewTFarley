@@ -5,7 +5,7 @@ import Bio from "../../components/Bio.astro";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog")).sort(
-    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
   );
 
   return posts.map((post, index) => ({
@@ -31,7 +31,10 @@ const date = new Date(post.data.date).toLocaleDateString("en-US", {
   <article>
     <header class="mb-10">
       <h1 class="mb-2">{post.data.title}</h1>
-      <time class="font-mono text-xs" style="color: var(--color-text-tertiary);">
+      <time
+        class="font-mono text-xs"
+        style="color: var(--color-text-tertiary);"
+      >
         {date}
       </time>
     </header>
@@ -43,32 +46,48 @@ const date = new Date(post.data.date).toLocaleDateString("en-US", {
   <hr class="my-10" />
   <Bio />
 
-  {(previous || next) && (
-    <nav class="flex flex-wrap justify-between gap-4 mt-10 list-none p-0 m-0">
-      <div>
-        {previous && (
-          <div>
-            <span class="text-xs font-mono uppercase tracking-wider block mb-1" style="color: var(--color-text-tertiary);">
-              Previous
-            </span>
-            <a href={`/blog/${previous.id}/`} rel="prev" class="text-sm font-medium">
-              &larr; {previous.data.title}
-            </a>
-          </div>
-        )}
-      </div>
-      <div class="text-right">
-        {next && (
-          <div>
-            <span class="text-xs font-mono uppercase tracking-wider block mb-1" style="color: var(--color-text-tertiary);">
-              Next
-            </span>
-            <a href={`/blog/${next.id}/`} rel="next" class="text-sm font-medium">
-              {next.data.title} &rarr;
-            </a>
-          </div>
-        )}
-      </div>
-    </nav>
-  )}
+  {
+    (previous || next) && (
+      <nav class="m-0 mt-10 flex list-none flex-wrap justify-between gap-4 p-0">
+        <div>
+          {previous && (
+            <div>
+              <span
+                class="mb-1 block font-mono text-xs tracking-wider uppercase"
+                style="color: var(--color-text-tertiary);"
+              >
+                Previous
+              </span>
+              <a
+                href={`/blog/${previous.id}/`}
+                rel="prev"
+                class="text-sm font-medium"
+              >
+                &larr; {previous.data.title}
+              </a>
+            </div>
+          )}
+        </div>
+        <div class="text-right">
+          {next && (
+            <div>
+              <span
+                class="mb-1 block font-mono text-xs tracking-wider uppercase"
+                style="color: var(--color-text-tertiary);"
+              >
+                Next
+              </span>
+              <a
+                href={`/blog/${next.id}/`}
+                rel="next"
+                class="text-sm font-medium"
+              >
+                {next.data.title} &rarr;
+              </a>
+            </div>
+          )}
+        </div>
+      </nav>
+    )
+  }
 </Layout>
