@@ -90,12 +90,16 @@ jobs:
       - name: Trigger preview deploy
         id: deploy
         run: |
-          pnpm --silent run deploy:preview -- --message "PR #${{ github.event.pull_request.number }} / ${{ github.sha }}" > deploy-result.json
+          deploy_alias="pr-${{ github.event.pull_request.number }}-${GITHUB_SHA::7}"
+          deploy_message="Deploy Preview #${{ github.event.pull_request.number }}: ${{ github.head_ref }} @${GITHUB_SHA::7}"
+          pnpm --silent run deploy:preview -- --alias "${deploy_alias}" --message "${deploy_message}" > deploy-result.json
           node scripts/extract-deploy-url.mjs deploy-result.json >> "$GITHUB_OUTPUT"
       - name: Publish preview URL
         run: |
           {
             echo "### Preview Deploy"
+            echo
+            echo "Alias: pr-${{ github.event.pull_request.number }}-${GITHUB_SHA::7}"
             echo
             echo "${{ steps.deploy.outputs.deploy_url }}"
           } >> "$GITHUB_STEP_SUMMARY"
@@ -132,7 +136,8 @@ jobs:
       - name: Trigger production deploy
         id: deploy
         run: |
-          pnpm --silent run deploy:production -- --message "master / ${{ github.sha }}" > deploy-result.json
+          deploy_message="Production: ${GITHUB_REF_NAME}@${GITHUB_SHA::7}"
+          pnpm --silent run deploy:production -- --message "${deploy_message}" > deploy-result.json
           node scripts/extract-deploy-url.mjs deploy-result.json >> "$GITHUB_OUTPUT"
       - name: Publish production URL
         run: |
