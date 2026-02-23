@@ -8,6 +8,10 @@ on:
     branches:
       - master
 
+concurrency:
+  group: quality-checks-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
   issues: write
@@ -97,12 +101,20 @@ jobs:
           node scripts/extract-deploy-url.mjs deploy-result.json >> "$GITHUB_OUTPUT"
       - name: Publish preview URL
         run: |
+          deploy_url="${{ steps.deploy.outputs.deploy_url }}"
+          deploy_host="${deploy_url#https://}"
+          deploy_host="${deploy_host#http://}"
+          deploy_host="${deploy_host%%/*}"
+          base_host="${deploy_host#*--}"
+          alias_url="https://pr-${{ github.event.pull_request.number }}--${base_host}"
           {
             echo "### Preview Deploy"
             echo
-            echo "Alias: pr-${{ github.event.pull_request.number }}"
+            echo "Preview URL: ${alias_url}"
             echo
-            echo "${{ steps.deploy.outputs.deploy_url }}"
+            echo "Deploy Permalink: ${deploy_url}"
+            echo
+            echo "Alias: pr-${{ github.event.pull_request.number }}"
           } >> "$GITHUB_STEP_SUMMARY"
       - name: Upsert preview comment
         uses: actions/github-script@v7
@@ -115,12 +127,25 @@ jobs:
             const issue_number = context.issue.number
             const owner = context.repo.owner
             const repo = context.repo.repo
+
+            let aliasUrl = process.env.DEPLOY_URL
+            try {
+              const deployHost = new URL(process.env.DEPLOY_URL).host
+              const [, baseHost] = deployHost.split(/--(.+)/)
+              if (baseHost) {
+                aliasUrl = `https://${process.env.DEPLOY_ALIAS}--${baseHost}`
+              }
+            } catch {
+              aliasUrl = process.env.DEPLOY_URL
+            }
+
             const body = [
               marker,
               '### Preview Deploy',
               '',
-              `- URL: ${process.env.DEPLOY_URL}`,
-              `- Alias: ${process.env.DEPLOY_ALIAS}`,
+              `- Preview URL: [${aliasUrl}](${aliasUrl})`,
+              `- Deploy Permalink: [${process.env.DEPLOY_URL}](${process.env.DEPLOY_URL})`,
+              `- Alias: \`${process.env.DEPLOY_ALIAS}\``,
               `- Commit: ${context.sha.slice(0, 7)}`,
             ].join('\n')
 
