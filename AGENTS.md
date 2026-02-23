@@ -178,6 +178,7 @@ Follow these instructions unless a direct user request overrides them.
   1. Run `pnpm run astro -- check` when relevant.
   2. Run `pnpm run build` for build-affecting changes.
   3. Use `pnpm run preview` for UI sanity checks when pages/styles changed.
+- `astro dev`, `astro check`, and `astro build` already run `astro sync`, so do not add a separate CI `sync` step unless you need type generation without those commands.
 - If commands are not run, state why.
 - Do not introduce broad formatting churn.
 

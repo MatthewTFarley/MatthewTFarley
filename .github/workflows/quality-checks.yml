@@ -113,28 +113,40 @@ jobs:
           deploy_alias="pr-${{ github.event.pull_request.number }}"
           pnpm --silent run deploy:preview -- --alias "${deploy_alias}" > deploy-result.json
           node scripts/extract-deploy-url.mjs deploy-result.json >> "$GITHUB_OUTPUT"
-      - name: Publish preview URL
-        run: |
-          deploy_url="${{ steps.deploy.outputs.deploy_url }}"
+
+          deploy_url="$(node -e 'const fs=require("node:fs");const p=JSON.parse(fs.readFileSync("deploy-result.json","utf8"));process.stdout.write(p.deploy_url||p.url||"")')"
           deploy_host="${deploy_url#https://}"
           deploy_host="${deploy_host#http://}"
           deploy_host="${deploy_host%%/*}"
           base_host="${deploy_host#*--}"
-          alias_url="https://pr-${{ github.event.pull_request.number }}--${base_host}"
+          alias_url="https://${deploy_alias}--${base_host}"
+
+          preview_url="${deploy_url}"
+          if curl -fsSI --max-time 10 "${alias_url}" >/dev/null 2>&1; then
+            preview_url="${alias_url}"
+          fi
+
+          echo "deploy_alias=${deploy_alias}" >> "$GITHUB_OUTPUT"
+          echo "preview_url=${preview_url}" >> "$GITHUB_OUTPUT"
+      - name: Publish preview URL
+        run: |
+          deploy_url="${{ steps.deploy.outputs.deploy_url }}"
+          preview_url="${{ steps.deploy.outputs.preview_url }}"
+          deploy_alias="${{ steps.deploy.outputs.deploy_alias }}"
           {
             echo "### Preview Deploy"
             echo
-            echo "Preview URL: ${alias_url}"
+            echo "Preview URL: ${preview_url}"
             echo
             echo "Deploy Permalink: ${deploy_url}"
             echo
-            echo "Alias: pr-${{ github.event.pull_request.number }}"
+            echo "Alias: ${deploy_alias}"
           } >> "$GITHUB_STEP_SUMMARY"
       - name: Upsert preview comment
         uses: actions/github-script@v7
         env:
           DEPLOY_URL: ${{ steps.deploy.outputs.deploy_url }}
-          DEPLOY_ALIAS: pr-${{ github.event.pull_request.number }}
+          PREVIEW_URL: ${{ steps.deploy.outputs.preview_url }}
         with:
           script: |
             const marker = '<!-- preview-deploy-comment -->'
@@ -142,22 +154,11 @@ jobs:
             const owner = context.repo.owner
             const repo = context.repo.repo
 
-            let aliasUrl = process.env.DEPLOY_URL
-            try {
-              const deployHost = new URL(process.env.DEPLOY_URL).host
-              const [, baseHost] = deployHost.split(/--(.+)/)
-              if (baseHost) {
-                aliasUrl = `https://${process.env.DEPLOY_ALIAS}--${baseHost}`
-              }
-            } catch {
-              aliasUrl = process.env.DEPLOY_URL
-            }
-
             const body = [
               marker,
               '### Preview Deploy',
               '',
-              `- Preview URL: [${aliasUrl}](${aliasUrl})`,
+              `- Preview URL: [${process.env.PREVIEW_URL}](${process.env.PREVIEW_URL})`,
               `- Deploy Permalink: [${process.env.DEPLOY_URL}](${process.env.DEPLOY_URL})`,
             ].join('\n')
 
