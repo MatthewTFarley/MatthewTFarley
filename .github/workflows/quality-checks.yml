@@ -1,0 +1,141 @@
+name: Quality Checks
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 24
+
+jobs:
+  format:
+    name: format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run format:check
+
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site-dist
+          path: dist
+
+  preview-deploy:
+    name: preview-deploy
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    needs:
+      - format
+      - lint
+      - build
+    env:
+      DEPLOY_AUTH_TOKEN: ${{ secrets.DEPLOY_AUTH_TOKEN }}
+      DEPLOY_SITE_ID: ${{ secrets.DEPLOY_SITE_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - uses: actions/download-artifact@v4
+        with:
+          name: site-dist
+          path: dist
+      - name: Validate deploy secrets
+        run: |
+          if [ -z "${DEPLOY_AUTH_TOKEN}" ] || [ -z "${DEPLOY_SITE_ID}" ]; then
+            echo "::error::Missing DEPLOY_AUTH_TOKEN or DEPLOY_SITE_ID repository secret."
+            exit 1
+          fi
+      - name: Trigger preview deploy
+        id: deploy
+        run: |
+          pnpm run deploy:preview -- --message "PR #${{ github.event.pull_request.number }} / ${{ github.sha }}" > deploy-result.json
+          node scripts/extract-deploy-url.mjs deploy-result.json >> "$GITHUB_OUTPUT"
+      - name: Publish preview URL
+        run: |
+          {
+            echo "### Preview Deploy"
+            echo
+            echo "${{ steps.deploy.outputs.deploy_url }}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  production-deploy:
+    name: production-deploy
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    needs:
+      - format
+      - lint
+      - build
+    env:
+      DEPLOY_AUTH_TOKEN: ${{ secrets.DEPLOY_AUTH_TOKEN }}
+      DEPLOY_SITE_ID: ${{ secrets.DEPLOY_SITE_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - uses: actions/download-artifact@v4
+        with:
+          name: site-dist
+          path: dist
+      - name: Validate deploy secrets
+        run: |
+          if [ -z "${DEPLOY_AUTH_TOKEN}" ] || [ -z "${DEPLOY_SITE_ID}" ]; then
+            echo "::error::Missing DEPLOY_AUTH_TOKEN or DEPLOY_SITE_ID repository secret."
+            exit 1
+          fi
+      - name: Trigger production deploy
+        id: deploy
+        run: |
+          pnpm run deploy:production -- --message "master / ${{ github.sha }}" > deploy-result.json
+          node scripts/extract-deploy-url.mjs deploy-result.json >> "$GITHUB_OUTPUT"
+      - name: Publish production URL
+        run: |
+          {
+            echo "### Production Deploy"
+            echo
+            echo "${{ steps.deploy.outputs.deploy_url }}"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -5,6 +5,13 @@
 This file guides coding agents working in this repository.
 Follow these instructions unless a direct user request overrides them.
 
+## Canonical Agent Instructions
+
+- `AGENTS.md` is the canonical instruction file for all coding agents in this repository.
+- `CLAUDE.md` is a pointer file and should direct agents to this file for all actionable guidance.
+- Agents must read `AGENTS.md` immediately on entry, before planning, before execution, and before any other action.
+- If an agent needs to change instructions, it must update `AGENTS.md` (and keep `CLAUDE.md` as a pointer-only file).
+
 ## Project Snapshot
 
 - Personal website for Matthew T Farley.
@@ -58,8 +65,17 @@ Follow these instructions unless a direct user request overrides them.
 - Preview: `pnpm run preview`
 - Astro CLI passthrough: `pnpm run astro -- <subcommand>`
 - Type/content checks (recommended): `pnpm run astro -- check`
-- Lint: no lint script configured in `package.json`.
+- Lint: `pnpm run lint`
+- Auto-fix lint: `pnpm run lint:fix`
+- Deploy preview (manual/CI): `pnpm run deploy:preview`
+- Deploy production (manual/CI): `pnpm run deploy:production`
 - Tests: no test script or test runner configured.
+
+## Hooks and CI
+
+- Pre-commit hook runs staged-file checks/fixes via `lint-staged` (`format` and `lint:fix` behavior on staged files).
+- Primary workflow: `.github/workflows/quality-checks.yml`.
+- Required checks for `master`: `format`, `lint`, `build`.
 
 ## Formatting Commands
 
@@ -169,11 +185,14 @@ Follow these instructions unless a direct user request overrides them.
 - Do not revert unrelated user changes.
 - Keep commits focused and descriptive.
 - Explain why changes were made, not only what changed.
+- Use feature branches for changes; do not commit directly to `master`.
+- Merge to `master` via pull request with required checks passing.
+- Only merge pull requests when a human user explicitly directs the merge.
 - If adding lint/tests later, update `package.json` scripts and this file together.
 
 ## Known Gaps
 
-- No lint script/config is currently configured.
+- No dedicated lint config file is currently configured.
 - No test framework is currently configured.
 - No single-test command is currently available.
 - If these are introduced, document exact commands here immediately.
