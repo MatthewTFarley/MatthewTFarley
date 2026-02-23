@@ -61,6 +61,7 @@ Follow these instructions unless a direct user request overrides them.
 ## Build/Lint/Test Commands
 
 - Build: `pnpm run build`
+- Check: `pnpm run check`
 - Dev: `pnpm run dev`
 - Preview: `pnpm run preview`
 - Astro CLI passthrough: `pnpm run astro -- <subcommand>`
@@ -75,7 +76,7 @@ Follow these instructions unless a direct user request overrides them.
 
 - Pre-commit hook runs staged-file checks/fixes via `lint-staged` (`format` and `lint:fix` behavior on staged files).
 - Primary workflow: `.github/workflows/quality-checks.yml`.
-- Required checks for `master`: `format`, `lint`, `build`.
+- Required checks for `master`: `format`, `lint`, `check`, `build`.
 
 ## Formatting Commands
 
@@ -125,7 +126,7 @@ Follow these instructions unless a direct user request overrides them.
 
 ### Types
 
-- TypeScript config extends `astro/tsconfigs/strict`.
+- TypeScript config extends `astro/tsconfigs/strictest`.
 - Prefer explicit props interfaces in Astro components/layouts.
 - Use schema validation in `src/content.config.ts` for content safety.
 - Avoid `any`; use inferred, narrowed, or declared concrete types.
@@ -177,6 +178,7 @@ Follow these instructions unless a direct user request overrides them.
   1. Run `pnpm run astro -- check` when relevant.
   2. Run `pnpm run build` for build-affecting changes.
   3. Use `pnpm run preview` for UI sanity checks when pages/styles changed.
+- `astro dev`, `astro check`, and `astro build` already run `astro sync`, so do not add a separate CI `sync` step unless you need type generation without those commands.
 - If commands are not run, state why.
 - Do not introduce broad formatting churn.
 
