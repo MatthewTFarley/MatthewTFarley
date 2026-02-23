@@ -145,8 +145,6 @@ jobs:
               '',
               `- Preview URL: [${aliasUrl}](${aliasUrl})`,
               `- Deploy Permalink: [${process.env.DEPLOY_URL}](${process.env.DEPLOY_URL})`,
-              `- Alias: \`${process.env.DEPLOY_ALIAS}\``,
-              `- Commit: ${context.sha.slice(0, 7)}`,
             ].join('\n')
 
             const comments = await github.paginate(github.rest.issues.listComments, {
