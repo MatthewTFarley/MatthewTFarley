@@ -90,7 +90,7 @@ jobs:
       - name: Trigger preview deploy
         id: deploy
         run: |
-          pnpm run deploy:preview -- --message "PR #${{ github.event.pull_request.number }} / ${{ github.sha }}" > deploy-result.json
+          pnpm --silent run deploy:preview -- --message "PR #${{ github.event.pull_request.number }} / ${{ github.sha }}" > deploy-result.json
           node scripts/extract-deploy-url.mjs deploy-result.json >> "$GITHUB_OUTPUT"
       - name: Publish preview URL
         run: |
@@ -132,7 +132,7 @@ jobs:
       - name: Trigger production deploy
         id: deploy
         run: |
-          pnpm run deploy:production -- --message "master / ${{ github.sha }}" > deploy-result.json
+          pnpm --silent run deploy:production -- --message "master / ${{ github.sha }}" > deploy-result.json
           node scripts/extract-deploy-url.mjs deploy-result.json >> "$GITHUB_OUTPUT"
       - name: Publish production URL
         run: |
