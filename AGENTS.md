@@ -25,30 +25,12 @@ Follow these instructions unless a direct user request overrides them.
 ## Source of Truth
 
 - Repository conventions in code under `src/`.
-- Project notes in `CLAUDE.md`.
 - Tooling config in `package.json`, `pnpm-workspace.yaml`, `prettier.config.mjs`, `tsconfig.json`, `astro.config.mjs`.
 - If conventions conflict, prefer:
   1. Explicit user instruction
   2. Existing file-local pattern
   3. Tool config files
   4. This AGENTS.md
-
-## Cursor/Copilot Rules
-
-- `.cursor/rules/`: not present at time of writing.
-- `.cursorrules`: not present at time of writing.
-- `.github/copilot-instructions.md`: not present at time of writing.
-- If any of these are added later, treat them as additional constraints.
-
-## Repository Layout
-
-- `src/pages/`: Astro routes (`index.astro`, `blog/index.astro`, `blog/[slug].astro`, `404.astro`).
-- `src/layouts/`: shared layout(s), currently `Layout.astro`.
-- `src/components/`: reusable Astro components.
-- `src/content/blog/`: MDX blog posts.
-- `src/content.config.ts`: collection schemas/loaders.
-- `src/styles/global.css`: global styles and design tokens.
-- `public/`: static assets.
 
 ## Setup Commands
 
@@ -68,39 +50,14 @@ Follow these instructions unless a direct user request overrides them.
 - Type/content checks (recommended): `pnpm run astro -- check`
 - Lint: `pnpm run lint`
 - Auto-fix lint: `pnpm run lint:fix`
-- Deploy preview (manual/CI): `pnpm run deploy:preview`
-- Deploy production (manual/CI): `pnpm run deploy:production`
-- Tests: no test script or test runner configured.
+- Deploy preview (manual/CI): `pnpm run deploy:preview`. Never run directly, only through CI.
+- Deploy production (manual/CI): `pnpm run deploy:production`. Never run directly, only through CI.
 
 ## Hooks and CI
 
 - Pre-commit hook runs staged-file checks/fixes via `lint-staged` (`format` and `lint:fix` behavior on staged files).
 - Primary workflow: `.github/workflows/quality-checks.yml`.
 - Required checks for `master`: `format`, `lint`, `check`, `build`.
-
-## Formatting Commands
-
-- Config source: `prettier.config.mjs` (plugins only; Prettier defaults otherwise)
-- Check formatting: `pnpm run format:check`
-- Apply formatting: `pnpm run format:fix`
-
-## Running a Single Test (Important)
-
-- Single-test execution is not available yet because no test framework is configured.
-- There are no `*test*` files in the repository at time of writing.
-- Current verification flow:
-  1. `pnpm run astro -- check`
-  2. `pnpm run build`
-  3. `pnpm run preview` and manually verify changed pages
-- If a test runner is added later, add scripts for:
-  - full suite (`test`)
-  - watch mode (`test:watch`)
-  - targeted runs (`test:single`)
-- Future examples (only after framework install):
-  - Vitest file: `pnpm exec vitest run path/to/file.test.ts`
-  - Vitest name: `pnpm exec vitest run -t "test name"`
-  - Jest file: `pnpm exec jest path/to/file.test.ts`
-  - Jest name: `pnpm exec jest -t "test name"`
 
 ## Code Style Guidelines
 
@@ -110,19 +67,13 @@ Follow these instructions unless a direct user request overrides them.
 - Do not refactor unrelated files.
 - Preserve the existing Astro-first architecture.
 - Prefer static-site solutions over runtime-heavy client logic.
+- Sort property names, lists of values, etc., alphanumerically.
 
 ### Imports
 
-- Use ESM imports.
 - In Astro frontmatter/TS files, place framework/external imports before local imports.
 - Keep imports explicit and avoid unused imports.
 - Use relative import paths consistent with nearby files.
-
-### Formatting
-
-- Follow Prettier defaults, with plugins loaded from `prettier.config.mjs`.
-- Keep formatting changes intentional; avoid broad churn unrelated to the request.
-- Match the style of touched files; avoid mass reformat-only diffs.
 
 ### Types
 
@@ -188,13 +139,7 @@ Follow these instructions unless a direct user request overrides them.
 - Keep commits focused and descriptive.
 - Explain why changes were made, not only what changed.
 - Use feature branches for changes; do not commit directly to `master`.
+- Name branches like a conventional commit: <task-type>/<task-description>
+- Use conventional commits style for commit messages.
 - Merge to `master` via pull request with required checks passing.
 - Only merge pull requests when a human user explicitly directs the merge.
-- If adding lint/tests later, update `package.json` scripts and this file together.
-
-## Known Gaps
-
-- No dedicated lint config file is currently configured.
-- No test framework is currently configured.
-- No single-test command is currently available.
-- If these are introduced, document exact commands here immediately.
