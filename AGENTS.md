@@ -85,7 +85,7 @@ Follow these instructions unless a direct user request overrides them.
 
 ### Naming Conventions
 
-- Components and layouts: `PascalCase.astro`.
+- Components and layouts: `kebab-case.astro`.
 - Route files: Astro conventions (`index.astro`, `[slug].astro`, `404.astro`).
 - Variables/functions: `camelCase`.
 - Constants: `camelCase` unless true constants justify `UPPER_SNAKE_CASE`.
